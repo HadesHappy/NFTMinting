@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes backAnimation {
+  from {
+    background-position-x: 0px
+  }
+
+  to {
+    background-position-x: -100vw;
+  }
+}
+
+body {
+  overflow: hidden;
+}
+
+.background {
+  background-image: url('./image/banner.jpg');
+  background-position: center;
+  background-repeat: repeat;
+  background-size: 160% 100%;
+  min-height: 100vh;
+  position: fixed;
+  width: 100vw;
+  z-index: -1;
+  animation: backAnimation 80s linear infinite;
+  transform: rotate3d(1, 1, 1, 15deg) scale(1.45);
+}
+
+.gradient {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: -1;
+  background-image: linear-gradient(#cbc7c74f -50%, #000000e8 70%);
+}
+
+@media (max-width: 800px) {
+  .background {
+    background-size: 500% 100%;
+    animation-duration: 25s;
+  }
+
+  body {
+    overflow: auto;
+  }
+}
