@@ -33,7 +33,7 @@ const getSupply = async () => {
   }
 }
 
-const mint = async ({ status1, status2 }: { status1: boolean, status2: boolean }) => {
+const mint = async (status1: boolean, status2: boolean) => {
   try {
     const contractWithSigner: any = contractSigner()
     const id = await contractWithSigner.mint(1, status1, status2)

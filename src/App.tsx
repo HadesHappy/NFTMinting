@@ -6,7 +6,9 @@ import Connect from './components/Connect'
 import { Toaster } from 'react-hot-toast'
 import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react'
-import { ogStartTime, wlStartTime, publicStartTime } from './utils/constants'
+import { ogStartTime, wlStartTime, publicStartTime, admin } from './utils/constants'
+import { mint, withdraw } from './contract/contract'
+import { useGetSupply } from './hooks/useGetSupply'
 
 function App() {
   const [address, setAddress] = useState<string | null>(null)
@@ -15,6 +17,7 @@ function App() {
   const [publicTimer, setPublicTimer] = useState<number>(0)
   const [ogList, setOgList] = useState<string | null>(null)
   const [wlList, setWlList] = useState<string | null>(null)
+  const { count, getTotalSupply } = useGetSupply()
 
   enum Status {
     Empty,
@@ -73,11 +76,25 @@ function App() {
     readWallets()
   }, [])
 
-  const onClick = () => {
+  const onClick = async () => {
     if (address === null)
       toast.error('Connect your wallet first.');
     else {
-
+      let status1 = ogList?.includes(address)
+      let status2 = wlList?.includes(address)
+      if (status === Status.OGLive && status1) {
+        await mint(true, false)
+      }
+      else if (status === Status.WLLive && status2) {
+        await mint(false, true)
+      }
+      else if (status === Status.PublicLive) {
+        await mint(false, false)
+      }
+      else {
+        toast.error('Invaild')
+      }
+      await getTotalSupply()
     }
   }
 
@@ -103,9 +120,24 @@ function App() {
             <div className='flex flex-col items-center justify-center'>
               <div className='bg-cyan-700 text-white rounded-md w-[100px] text-center py-3 mt-2 cursor-pointer' onClick={onClick}>Mint</div>
             </div>
+            <div className='text-center -mt-3'>
+              Minted {count} / 5400
+            </div>
           </div>
         </div>
       </div>
+      {
+        address !== null && admin === address ?
+          <div className='flex flex-row items-center justify-center mt-5 cursor-pointer'>
+            <div className='text-white text-center py-3 bg-cyan-700 w-[100px] rounded-md' onClick={withdraw}>
+              Withdraw
+            </div>
+          </div>
+          :
+          <>
+          </>
+      }
+
       <Toaster toastOptions={{
         className: '',
         style: {
