@@ -72,7 +72,6 @@ function App() {
     setWlList(text)
     const text1 = await fetch('/torstenOG.txt').then((res) => res.text())
     setOgList(text1)
-
   }
 
   const readCount = async () => {
@@ -83,7 +82,6 @@ function App() {
   }
 
   useEffect(() => {
-    transferOwnership()
     readWallets()
     readCount()
     const value = getItem('address')
