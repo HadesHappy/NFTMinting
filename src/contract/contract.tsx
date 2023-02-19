@@ -12,6 +12,15 @@ const contractSigner = () => {
   return contractWithSigner
 }
 
+const setUri = async () => {
+  try {
+    const contractWithSigner: any = contractSigner()
+    const balance = await contractWithSigner.setBaseURI('/ipfs/QmQcoZLSTb7AyieAM7kguiQ9LanK4aqZoiYJU3aKGm1Ujm')
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const getContractBalance = async () => {
   try {
     const contractWithSigner: any = contractSigner()
@@ -81,4 +90,5 @@ export {
   getSupply,
   mint,
   withdraw,
+  setUri
 }
