@@ -16,7 +16,7 @@ const getContractBalance = async () => {
   try {
     const contractWithSigner: any = contractSigner()
     const balance = await contractWithSigner.totalBalance()
-    return ethers.utils.formatEther(balance)
+    return Number(ethers.utils.formatEther(balance))
   } catch (error) {
     console.log('error: ', error)
   }

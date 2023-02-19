@@ -6,8 +6,9 @@ import Connect from './components/Connect'
 import { Toaster } from 'react-hot-toast'
 import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react'
-import { ogStartTime, wlStartTime, publicStartTime, admin } from './utils/constants'
-import { mint, withdraw, getSupply } from './contract/contract'
+import { ogStartTime, wlStartTime, publicStartTime, admin, owner } from './utils/constants'
+import { mint, withdraw, getSupply, getContractBalance } from './contract/contract'
+import { useLocalStorage } from './hooks/useLocalStorage'
 
 function App() {
   const [address, setAddress] = useState<string>('')
@@ -17,6 +18,9 @@ function App() {
   const [ogList, setOgList] = useState<string | null>(null)
   const [wlList, setWlList] = useState<string | null>(null)
   const [count, setCount] = useState<number>(0)
+  const [balance, setBalance] = useState<number>(0)
+
+  const { getItem } = useLocalStorage()
 
   enum Status {
     Empty,
@@ -68,17 +72,29 @@ function App() {
     setWlList(text)
     const text1 = await fetch('/torstenOG.txt').then((res) => res.text())
     setOgList(text1)
+
   }
 
   const readCount = async () => {
     const res = await getSupply()
     setCount(res || 0)
+    const adminBalance = await getContractBalance()
+    setBalance(adminBalance || 0)
   }
 
   useEffect(() => {
     readWallets()
     readCount()
+    const value = getItem('address')
+    if (value)
+      setAddress(value)
   }, [])
+
+  const withdrawClick = async () => {
+    await withdraw()
+    const adminBalance = await getContractBalance()
+    setBalance(adminBalance || 0)
+  }
 
   const onClick = async () => {
     if (address === null)
@@ -138,11 +154,12 @@ function App() {
         </div>
       </div>
       {
-        admin === address ?
-          <div className='flex flex-row items-center justify-center mt-5 cursor-pointer'>
-            <div className='text-white text-center py-3 bg-cyan-700 w-[100px] rounded-md' onClick={withdraw}>
+        address === admin.toLowerCase() || address === owner.toLowerCase() ?
+          <div className='flex flex-row items-center justify-center mt-5 cursor-pointer gap-5'>
+            <div className='text-white text-center py-3 bg-cyan-700 w-[100px] rounded-md' onClick={withdrawClick}>
               Withdraw
             </div>
+            <div className='text-white'>Balance: {balance} ETH</div>
           </div>
           :
           <>

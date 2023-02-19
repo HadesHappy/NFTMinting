@@ -1,8 +1,10 @@
 import { useMetamaskStatus } from "../hooks/useMetamaskStatus"
 import toast from 'react-hot-toast'
+import { useLocalStorage } from "../hooks/useLocalStorage"
 
 const Connect = ({ setAddress }: { setAddress: any }) => {
   const { isMetamaskInstalled } = useMetamaskStatus()
+  const { setItem } = useLocalStorage()
 
   const connectWallet = async (): Promise<void> => {
     if (isMetamaskInstalled)
@@ -12,7 +14,8 @@ const Connect = ({ setAddress }: { setAddress: any }) => {
         })
         .then((accounts: string[]) => {
           setAddress(accounts[0])
-          toast.success('connected address: ' + accounts[0].slice(0, 7) + '...' + accounts[0].slice(-4))
+          setItem('address', accounts[0])
+          toast.success('connected address: ' + accounts[0].slice(0, 5) + '...' + accounts[0].slice(-5))
         })
         .catch((error: any) => {
           toast.error(`Something went wrong: ${error}`)
