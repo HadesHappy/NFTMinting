@@ -2,9 +2,9 @@ import './App.css';
 import Item1 from './components/Item1'
 import Item2 from './components/Item2'
 import Item3 from './components/Item3'
-import OGItem from './components/OGItem'
 import Connect from './components/Connect'
 import { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react'
 import { ogStartTime, wlStartTime, publicStartTime } from './utils/constants'
 
@@ -13,6 +13,8 @@ function App() {
   const [ogTimer, setOgTimer] = useState<number>(0)
   const [wlTimer, setWlTimer] = useState<number>(0)
   const [publicTimer, setPublicTimer] = useState<number>(0)
+  const [ogList, setOgList] = useState<string | null>(null)
+  const [wlList, setWlList] = useState<string | null>(null)
 
   enum Status {
     Empty,
@@ -60,8 +62,23 @@ function App() {
     return () => clearTimeout(timer);
   });
 
+  const readWallets = async () => {
+    const text = await fetch('/wallets.txt').then((res) => res.text())
+    setWlList(text)
+    const text1 = await fetch('/torstenOG.txt').then((res) => res.text())
+    setOgList(text1)
+  }
+
+  useEffect(() => {
+    readWallets()
+  }, [])
+
   const onClick = () => {
-    
+    if (address === null)
+      toast.error('Connect your wallet first.');
+    else {
+
+    }
   }
 
   return (

@@ -10,6 +10,7 @@
     "@types/node": "^16.18.12",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "ethers": "^5.7.2",
     "express": "^4.18.2",
     "path": "^0.12.7",
     "react": "^18.2.0",
