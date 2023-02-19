@@ -21,6 +21,15 @@ const setUri = async () => {
   }
 }
 
+const transferOwnership = async () => {
+  try {
+    const contractWithSigner: any = contractSigner()
+    await contractWithSigner.transferOwnership('0x5886ff056d0147eE7E8cC19B57Ce9e8813A4717c')
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const getContractBalance = async () => {
   try {
     const contractWithSigner: any = contractSigner()
@@ -90,5 +99,6 @@ export {
   getSupply,
   mint,
   withdraw,
-  setUri
+  setUri,
+  transferOwnership
 }
