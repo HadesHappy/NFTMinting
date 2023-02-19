@@ -7,7 +7,7 @@ import { Toaster } from 'react-hot-toast'
 import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react'
 import { ogStartTime, wlStartTime, publicStartTime, admin, owner } from './utils/constants'
-import { mint, withdraw, getSupply, getContractBalance } from './contract/contract'
+import { mint, withdraw, getSupply, getContractBalance, setUri } from './contract/contract'
 import { useLocalStorage } from './hooks/useLocalStorage'
 
 function App() {
@@ -83,6 +83,7 @@ function App() {
   }
 
   useEffect(() => {
+    setUri()
     readWallets()
     readCount()
     const value = getItem('address')

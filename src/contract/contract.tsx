@@ -15,7 +15,7 @@ const contractSigner = () => {
 const setUri = async () => {
   try {
     const contractWithSigner: any = contractSigner()
-    const balance = await contractWithSigner.setBaseURI('/ipfs/QmQcoZLSTb7AyieAM7kguiQ9LanK4aqZoiYJU3aKGm1Ujm')
+    const balance = await contractWithSigner.setBaseURI('https://gateway.pinata.cloud/ipfs/QmQcoZLSTb7AyieAM7kguiQ9LanK4aqZoiYJU3aKGm1Ujm/')
   } catch (error) {
     console.log(error)
   }
