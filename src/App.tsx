@@ -165,6 +165,11 @@ function App() {
           <>
           </>
       }
+      <div className='flex flex-col items-center justify-center'>
+        <div className='text-gray-500 mt-20 border border-cyan-700 rounded-md w-[300px] text-center'>
+          Made by Torsten Labs
+        </div>
+      </div>
 
       <Toaster toastOptions={{
         className: '',
