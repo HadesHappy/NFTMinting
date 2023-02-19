@@ -7,17 +7,16 @@ import { Toaster } from 'react-hot-toast'
 import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react'
 import { ogStartTime, wlStartTime, publicStartTime, admin } from './utils/constants'
-import { mint, withdraw } from './contract/contract'
-import { useGetSupply } from './hooks/useGetSupply'
+import { mint, withdraw, getSupply } from './contract/contract'
 
 function App() {
-  const [address, setAddress] = useState<string | null>(null)
+  const [address, setAddress] = useState<string>('')
   const [ogTimer, setOgTimer] = useState<number>(0)
   const [wlTimer, setWlTimer] = useState<number>(0)
   const [publicTimer, setPublicTimer] = useState<number>(0)
   const [ogList, setOgList] = useState<string | null>(null)
   const [wlList, setWlList] = useState<string | null>(null)
-  const { count, getTotalSupply } = useGetSupply()
+  const [count, setCount] = useState<number>(0)
 
   enum Status {
     Empty,
@@ -28,7 +27,6 @@ function App() {
   }
 
   const [status, setStatus] = useState<Status>(Status.Empty)
-
   const calculateTimeLeft = () => {
     const differenceWithOg = Math.floor((ogStartTime.getTime() - new Date().getTime()) / 1000);
     const differenceWithWl = Math.floor((wlStartTime.getTime() - new Date().getTime()) / 1000);
@@ -72,29 +70,42 @@ function App() {
     setOgList(text1)
   }
 
+  const readCount = async () => {
+    const res = await getSupply()
+    setCount(res || 0)
+  }
+
   useEffect(() => {
     readWallets()
+    readCount()
   }, [])
 
   const onClick = async () => {
     if (address === null)
       toast.error('Connect your wallet first.');
     else {
-      let status1 = ogList?.includes(address)
-      let status2 = wlList?.includes(address)
+      let status1 = ogList?.toLowerCase().includes(address)
+      let status2 = wlList?.toLowerCase().includes(address)
+      let response
       if (status === Status.OGLive && status1) {
-        await mint(true, false)
+        response = await mint(true, false, '0.027')
       }
       else if (status === Status.WLLive && status2) {
-        await mint(false, true)
+        response = await mint(false, true, '0.029')
       }
       else if (status === Status.PublicLive) {
-        await mint(false, false)
+        response = await mint(false, false, '0.029')
       }
       else {
         toast.error('Invaild')
       }
-      await getTotalSupply()
+      if (response && response.status === '200') {
+        toast.success('Mint Suceed.')
+        await readCount()
+      }
+      else {
+        toast.error('Mint Failed.')
+      }
     }
   }
 
@@ -127,7 +138,7 @@ function App() {
         </div>
       </div>
       {
-        address !== null && admin === address ?
+        admin === address ?
           <div className='flex flex-row items-center justify-center mt-5 cursor-pointer'>
             <div className='text-white text-center py-3 bg-cyan-700 w-[100px] rounded-md' onClick={withdraw}>
               Withdraw

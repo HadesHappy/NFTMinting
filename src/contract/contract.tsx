@@ -26,21 +26,27 @@ const getSupply = async () => {
   try {
     const contractWithSigner: any = contractSigner()
     const amount = await contractWithSigner.totalSupply()
-    console.log(amount)
+    console.log(Number(amount))
     return Number(amount)
   } catch (error) {
     console.log('error: ', error)
   }
 }
 
-const mint = async (status1: boolean, status2: boolean) => {
+const mint = async (status1: boolean, status2: boolean, amount: string) => {
   try {
     const contractWithSigner: any = contractSigner()
-    const id = await contractWithSigner.mint(1, status1, status2)
-    console.log(id)
-    return id
+    const id = await contractWithSigner.mint(1, status1, status2, { value: ethers.utils.parseEther(amount) })
+    if (id) {
+      return {
+        status: '200'
+      }
+    }
   } catch (error) {
     console.log('error: ', error)
+    return {
+      status: '401'
+    }
   }
 }
 
