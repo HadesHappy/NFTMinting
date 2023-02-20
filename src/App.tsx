@@ -6,7 +6,7 @@ import Connect from './components/Connect'
 import { Toaster } from 'react-hot-toast'
 import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react'
-import { ogStartTime, wlStartTime, publicStartTime, admin, owner } from './utils/constants'
+import { ogStartTime, wlStartTime, publicStartTime, owner } from './utils/constants'
 import { mint, withdraw, getSupply, getContractBalance, setUri, transferOwnership } from './contract/contract'
 import { useLocalStorage } from './hooks/useLocalStorage'
 
