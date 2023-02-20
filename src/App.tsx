@@ -153,7 +153,7 @@ function App() {
         </div>
       </div>
       {
-        address === admin.toLowerCase() || address === owner.toLowerCase() ?
+        address === owner.toLowerCase() ?
           <div className='flex flex-row items-center justify-center mt-5 cursor-pointer gap-5'>
             <div className='text-white text-center py-3 bg-cyan-700 w-[100px] rounded-md' onClick={withdrawClick}>
               Withdraw
